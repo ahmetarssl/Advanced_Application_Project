@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/datapulse
+    username: datapulse
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    open-in-view: false
+
+app:
+  jwt:
+    # JWT için gerekli olan minimum 32 karakterlik (Base64) güvenlik anahtarı
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
+
+cors:
+  allowed-origins: http://localhost:4200
