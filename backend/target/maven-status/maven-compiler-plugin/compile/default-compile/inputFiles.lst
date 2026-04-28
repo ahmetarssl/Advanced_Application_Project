@@ -1,0 +1,14 @@
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\config\CorsConfig.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\security\JwtService.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\web\dto\RegisterRequest.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\repository\UserRepository.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\domain\enums\Role.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\web\dto\LoginRequest.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\security\CustomUserDetailsService.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\domain\User.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\security\SecurityConfig.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\service\AuthService.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\web\AuthController.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\web\dto\AuthResponse.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\DatapulseApplication.java
+C:\Users\Ahmet\Desktop\Advanced_Application_Project\backend\src\main\java\com\datapulse\security\JwtFilter.java

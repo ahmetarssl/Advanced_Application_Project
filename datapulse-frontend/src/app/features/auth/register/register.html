@@ -1,0 +1,27 @@
+<div class="login-container">
+  <div class="login-box">
+    <h2>DataPulse'a Kayıt Ol</h2>
+    <div class="error-box" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="success-box" *ngIf="successMessage">{{ successMessage }}</div>
+
+    <form (ngSubmit)="onRegister()">
+      <div class="form-group">
+        <label>E-posta Adresi</label>
+        <input type="email" name="email" [(ngModel)]="email" required placeholder="ornek@email.com">
+      </div>
+      <div class="form-group">
+        <label>Şifre</label>
+        <input type="password" name="password" [(ngModel)]="password" required placeholder="Şifrenizi belirleyin">
+      </div>
+      <div class="form-group">
+        <label>Hesap Türü</label>
+        <select name="roleType" [(ngModel)]="roleType" class="form-select">
+          <option value="INDIVIDUAL">Bireysel Kullanıcı</option>
+          <option value="CORPORATE">Kurumsal Kullanıcı</option>
+        </select>
+      </div>
+      <button type="submit" class="login-btn">Kayıt Ol</button>
+    </form>
+    <p class="switch-page">Zaten hesabın var mı? <a routerLink="/login">Giriş Yap</a></p>
+  </div>
+</div>

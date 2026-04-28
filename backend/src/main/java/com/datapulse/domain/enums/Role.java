@@ -1,4 +1,5 @@
 package com.datapulse.domain.enums;
 
-public class Role {
+public enum Role {
+    ADMIN, CORPORATE, INDIVIDUAL
 }

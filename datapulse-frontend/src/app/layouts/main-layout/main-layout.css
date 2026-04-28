@@ -1,0 +1,153 @@
+.layout-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: #0f111a; /* Derin uzay siyahı */
+  color: #ffffff;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+/* SIDEBAR TASARIMI */
+.sidebar {
+  width: 260px;
+  background-color: #151521;
+  border-right: 1px solid #1e1e2d;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  padding: 0 24px 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  color: #6366f1; /* Neon Mavi */
+}
+
+.menu-section {
+  font-size: 11px;
+  font-weight: 600;
+  color: #565674;
+  letter-spacing: 1.2px;
+  padding: 0 24px 10px;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 24px;
+  color: #92928f;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.15) 0%, transparent 100%);
+  color: #6366f1;
+  border-left: 3px solid #6366f1;
+}
+
+.nav-item i {
+  font-size: 18px;
+}
+
+/* AI Assistant Butonu Özelleştirmesi */
+.badge.neon-pink {
+  background-color: #f43f5e;
+  color: white;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-left: auto;
+}
+
+/* ANA İÇERİK ALANI */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 40px;
+  background-color: #0f111a;
+}
+
+.welcome-text h2 {
+  font-size: 22px;
+  margin: 0 0 5px 0;
+  font-weight: 600;
+}
+
+.welcome-text p {
+  margin: 0;
+  color: #92928f;
+  font-size: 14px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.search-box {
+  background-color: #151521;
+  border: 1px solid #1e1e2d;
+  border-radius: 8px;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-box input {
+  background: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  width: 200px;
+}
+
+.logout-btn {
+  background-color: #1e1e2d;
+  color: #f43f5e;
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #2b2b40;
+}
+
+.content-area {
+  padding: 0 40px 40px;
+  flex: 1;
+}

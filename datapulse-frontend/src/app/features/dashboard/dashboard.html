@@ -1,0 +1,30 @@
+<div class="dashboard-container">
+
+  <div class="kpi-grid">
+    @for (kpi of kpiData; track kpi.title) {
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="icon-box" [ngClass]="kpi.colorClass">
+            <i class="bi {{ kpi.icon }}"></i>
+          </div>
+          <div class="trend-badge" [class.positive]="kpi.isPositive" [class.negative]="!kpi.isPositive">
+            <i class="bi" [class.bi-arrow-up-short]="kpi.isPositive" [class.bi-arrow-down-short]="!kpi.isPositive"></i>
+            {{ kpi.trend }}
+          </div>
+        </div>
+        <div class="kpi-body">
+          <h3 class="kpi-value">{{ kpi.value }}</h3>
+          <p class="kpi-title">{{ kpi.title }}</p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="chart-section">
+    <h3>Revenue Overview</h3>
+    <div class="chart-box">
+      <p class="text-muted"><i class="bi bi-bar-chart"></i> Satış Grafiği Buraya Gelecek</p>
+    </div>
+  </div>
+
+</div>

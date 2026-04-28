@@ -1,0 +1,51 @@
+<div class="layout-wrapper">
+  <aside class="sidebar">
+    <div class="logo">
+      <i class="bi bi-bar-chart-fill logo-icon"></i> DataPulse
+    </div>
+
+    <div class="menu-section">MAIN MENU</div>
+    <nav class="nav-menu">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-house-door"></i> Dashboard
+      </a>
+      <a routerLink="/chat" routerLinkActive="active" class="nav-item ai-link">
+        <i class="bi bi-robot"></i> AI Assistant <span class="badge neon-pink">New</span>
+      </a>
+      <a class="nav-item"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
+      <a class="nav-item"><i class="bi bi-cart3"></i> Orders</a>
+      <a class="nav-item"><i class="bi bi-box-seam"></i> Products</a>
+    </nav>
+
+    <div class="menu-section mt-4">MANAGEMENT</div>
+    <nav class="nav-menu">
+      <a class="nav-item"><i class="bi bi-people"></i> Customers</a>
+      <a class="nav-item"><i class="bi bi-gear"></i> Store Settings</a>
+      <a class="nav-item"><i class="bi bi-truck"></i> Shipments</a>
+      <a class="nav-item"><i class="bi bi-star"></i> Reviews</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div class="welcome-text">
+        <h2>Welcome back! 👋</h2>
+        <p>Here's what's happening with your store today.</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="search-box">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Search...">
+        </div>
+        <button (click)="logout()" class="logout-btn" title="Çıkış Yap">
+          <i class="bi bi-box-arrow-right"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
