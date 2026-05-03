@@ -1,1 +1,66 @@
-<p>chat works!</p>
+<div class="chat-wrapper">
+
+  <!-- Sol Taraf: Mesajlaşma Alanı -->
+  <div class="chat-panel">
+    <div class="panel-header">
+      <h2><i class="bi bi-robot"></i> AI Data Assistant</h2>
+      <span class="secure-badge"><i class="bi bi-shield-lock-fill"></i> Secure Mode</span>
+    </div>
+
+    <div class="messages-container">
+      @for (msg of messages; track msg) {
+        <div class="message-row" [class.user-row]="msg.sender === 'user'">
+          <div class="message-bubble"
+               [class.user-bubble]="msg.sender === 'user'"
+               [class.ai-bubble]="msg.sender === 'ai'">
+            {{ msg.text }}
+          </div>
+        </div>
+      }
+
+      @if (isTyping) {
+        <div class="message-row">
+          <div class="message-bubble ai-bubble typing-indicator">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="input-area">
+      <input type="text"
+             [(ngModel)]="userInput"
+             (keyup.enter)="sendMessage()"
+             placeholder="Veritabanına bir soru sorun (Örn: En çok satan 5 ürün)...">
+      <button (click)="sendMessage()"><i class="bi bi-send-fill"></i></button>
+    </div>
+  </div>
+
+  <!-- Sağ Taraf: Dinamik Grafik Alanı (GERÇEK CHART.JS BURADA) -->
+  <div class="chart-panel">
+    <div class="panel-header chart-header">
+      <h3><i class="bi bi-bar-chart-fill"></i> Analiz Görselleştirmesi</h3>
+    </div>
+
+    <div class="chart-content">
+      @if (messages[messages.length - 1]?.hasChart) {
+
+        <!-- İŞTE GERÇEK GRAFİĞİMİZ BURAYA GELDİ -->
+        <div style="height: 300px; width: 100%; position: relative;">
+          <app-chart-wrapper
+            [type]="'bar'"
+            [data]="messages[messages.length - 1].chartData!">
+          </app-chart-wrapper>
+        </div>
+
+        <p class="chart-caption"><i class="bi bi-info-circle"></i> Rol bazlı güvenlik filtresinden geçirilmiş canlı veriler</p>
+      } @else {
+        <div class="empty-state">
+          <i class="bi bi-graph-up"></i>
+          <p>Yapay zekanın grafik çizebilmesi için bir analiz sorusu sorun.</p>
+        </div>
+      }
+    </div>
+  </div>
+
+</div>

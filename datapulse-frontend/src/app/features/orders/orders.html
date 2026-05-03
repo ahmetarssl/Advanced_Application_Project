@@ -1,0 +1,67 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Orders Management <i class="bi bi-cart3"></i></h1>
+      <p>Track and manage all orders</p>
+    </div>
+    @if (isCorporateOrAdmin()) {
+      <button class="btn-primary"><i class="bi bi-plus-lg"></i> New Order</button>
+    }
+  </div>
+
+  <div class="filter-bar">
+    <select [(ngModel)]="filterStatus" class="filter-select">
+      @for (s of statuses; track s) {
+        <option [value]="s">{{ s }}</option>
+      }
+    </select>
+    <div class="search-box">
+      <i class="bi bi-search"></i>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search orders...">
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ORDER ID</th>
+          <th>CUSTOMER</th>
+          <th>PRODUCTS</th>
+          <th>TOTAL</th>
+          <th>DATE</th>
+          <th>STATUS</th>
+          @if (isCorporateOrAdmin()) { <th>ACTIONS</th> }
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of filteredOrders; track order.id) {
+          <tr>
+            <td class="order-id">{{ order.id }}</td>
+            <td>
+              <div class="customer-cell">
+                <div class="avatar">{{ order.initials }}</div>
+                {{ order.customer }}
+              </div>
+            </td>
+            <td>{{ order.products }} items</td>
+            <td class="total">{{ order.total }}</td>
+            <td class="date">{{ order.date }}</td>
+            <td><span class="status-badge" [ngClass]="getStatusClass(order.status)">• {{ order.status }}</span></td>
+            @if (isCorporateOrAdmin()) {
+              <td>
+                <div class="action-btns">
+                  <button class="icon-btn" title="View"><i class="bi bi-eye"></i></button>
+                  <button class="icon-btn" title="Edit"><i class="bi bi-pencil"></i></button>
+                </div>
+              </td>
+            }
+          </tr>
+        }
+        @empty {
+          <tr><td colspan="7" class="empty-row">No orders found.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

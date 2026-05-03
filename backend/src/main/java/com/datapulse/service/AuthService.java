@@ -20,8 +20,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    // Lombok çalışmadığı için Constructor'ı (bağlayıcıyı) elimizle yazıyoruz
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                       JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -36,13 +36,15 @@ public class AuthService {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setName(deriveNameFromEmail(request.getEmail()));
         user.setRoleType(request.getRoleType() != null ? request.getRoleType() : Role.INDIVIDUAL);
         user.setIsActive(true);
 
         userRepository.save(user);
 
         String token = jwtService.generateAccessToken(user);
-        return new AuthResponse(token, "Kayıt başarılı");
+        String name = deriveNameFromEmail(user.getEmail());
+        return new AuthResponse(token, "Kayıt başarılı", user.getEmail(), name, user.getRoleType().name());
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -54,6 +56,21 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
 
         String token = jwtService.generateAccessToken(user);
-        return new AuthResponse(token, "Giriş başarılı");
+        String name = deriveNameFromEmail(user.getEmail());
+        return new AuthResponse(token, "Giriş başarılı", user.getEmail(), name, user.getRoleType().name());
+    }
+
+    private String deriveNameFromEmail(String email) {
+        String localPart = email.split("@")[0];
+        String[] parts = localPart.replace(".", " ").replace("_", " ").split(" ");
+        StringBuilder sb = new StringBuilder();
+        for (String part : parts) {
+            if (!part.isEmpty()) {
+                sb.append(Character.toUpperCase(part.charAt(0)))
+                  .append(part.substring(1).toLowerCase())
+                  .append(" ");
+            }
+        }
+        return sb.toString().trim();
     }
 }

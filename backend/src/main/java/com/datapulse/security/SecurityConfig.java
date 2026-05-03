@@ -2,6 +2,7 @@ package com.datapulse.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,7 +22,6 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final CustomUserDetailsService uds;
 
-    // Lombok yerine kendi ellerimizle yazdığımız bağlayıcı
     public SecurityConfig(JwtFilter jwtFilter, CustomUserDetailsService uds) {
         this.jwtFilter = jwtFilter;
         this.uds = uds;
@@ -34,7 +34,15 @@ public class SecurityConfig {
                 .cors(cors -> {})
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Kayıt ve Giriş işlemlerine herkes erişebilsin
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()   // <-- YENI
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs"
+                        ).permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/corporate/**").hasAnyRole("ADMIN", "CORPORATE")
                         .requestMatchers("/api/individual/**").hasAnyRole("ADMIN", "INDIVIDUAL", "CORPORATE")
                         .anyRequest().authenticated()

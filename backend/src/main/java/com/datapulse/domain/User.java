@@ -14,13 +14,19 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String passwordHash;
+
+    @Column(name = "name")
+    private String name;
 
     private Boolean isActive = true;
 
     @Enumerated(EnumType.STRING)
     private Role roleType;
+
+    @Column(name = "store_id")
+    private Long storeId;
 
     // --- LOMBOK YERİNE MANUEL METODLAR (GARANTİ ÇÖZÜM) ---
 
@@ -38,6 +44,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPasswordHash() {
@@ -62,5 +76,13 @@ public class User {
 
     public void setRoleType(Role roleType) {
         this.roleType = roleType;
+    }
+
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
     }
 }

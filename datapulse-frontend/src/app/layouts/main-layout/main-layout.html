@@ -4,32 +4,102 @@
       <i class="bi bi-bar-chart-fill logo-icon"></i> DataPulse
     </div>
 
+    <div class="user-info">
+      <div class="user-avatar">{{ userName().charAt(0).toUpperCase() }}</div>
+      <div>
+        <div class="user-name">{{ userName() }}</div>
+        <div class="user-role">{{ role() }}</div>
+      </div>
+    </div>
+
     <div class="menu-section">MAIN MENU</div>
     <nav class="nav-menu">
       <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
         <i class="bi bi-house-door"></i> Dashboard
       </a>
-      <a routerLink="/chat" routerLinkActive="active" class="nav-item ai-link">
+      <a routerLink="/ai-assistant" routerLinkActive="active" class="nav-item ai-link">
         <i class="bi bi-robot"></i> AI Assistant <span class="badge neon-pink">New</span>
       </a>
-      <a class="nav-item"><i class="bi bi-graph-up-arrow"></i> Analytics</a>
-      <a class="nav-item"><i class="bi bi-cart3"></i> Orders</a>
-      <a class="nav-item"><i class="bi bi-box-seam"></i> Products</a>
+      @if (isAdmin() || isCorporate()) {
+        <a routerLink="/analytics" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-graph-up-arrow"></i> Analytics
+        </a>
+      }
+      <a routerLink="/orders" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-cart3"></i> Orders
+      </a>
+      <a routerLink="/products" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-box-seam"></i> Products
+      </a>
     </nav>
 
-    <div class="menu-section mt-4">MANAGEMENT</div>
-    <nav class="nav-menu">
-      <a class="nav-item"><i class="bi bi-people"></i> Customers</a>
-      <a class="nav-item"><i class="bi bi-gear"></i> Store Settings</a>
-      <a class="nav-item"><i class="bi bi-truck"></i> Shipments</a>
-      <a class="nav-item"><i class="bi bi-star"></i> Reviews</a>
-    </nav>
+    @if (isAdmin() || isCorporate()) {
+      <div class="menu-section mt-4">MANAGEMENT</div>
+      <nav class="nav-menu">
+        <a routerLink="/customers" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-people"></i> Customers
+        </a>
+        @if (isCorporate()) {
+          <a routerLink="/store-settings" routerLinkActive="active" class="nav-item">
+            <i class="bi bi-gear"></i> Store Settings
+          </a>
+        }
+        <a routerLink="/shipments" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-truck"></i> Shipments
+        </a>
+        <a routerLink="/reviews" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-star"></i> Reviews
+        </a>
+      </nav>
+    }
+
+    @if (isIndividual()) {
+      <div class="menu-section mt-4">MY ACCOUNT</div>
+      <nav class="nav-menu">
+        <a routerLink="/shipments" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-truck"></i> My Shipments
+        </a>
+        <a routerLink="/reviews" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-star"></i> My Reviews
+        </a>
+      </nav>
+    }
+
+    @if (isAdmin()) {
+      <div class="menu-section mt-4">ADMIN</div>
+      <nav class="nav-menu">
+        <a routerLink="/admin/users" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-person-gear"></i> User Management
+        </a>
+        <a routerLink="/admin/stores" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-shop"></i> Store Management
+        </a>
+        <a routerLink="/admin/categories" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-tags"></i> Categories
+        </a>
+        <a routerLink="/shipments" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-truck"></i> Shipments
+        </a>
+        <a routerLink="/reviews" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-star"></i> Reviews
+        </a>
+      </nav>
+    }
+
+    <div class="sidebar-footer">
+      <a routerLink="/profile" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-person-circle"></i> Profile
+      </a>
+      <button (click)="logout()" class="nav-item logout-nav-btn">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </button>
+    </div>
   </aside>
 
   <main class="main-content">
     <header class="topbar">
       <div class="welcome-text">
-        <h2>Welcome back! 👋</h2>
+        <h2>Welcome back, {{ userName() }} 👋</h2>
         <p>Here's what's happening with your store today.</p>
       </div>
 
@@ -38,7 +108,7 @@
           <i class="bi bi-search"></i>
           <input type="text" placeholder="Search...">
         </div>
-        <button (click)="logout()" class="logout-btn" title="Çıkış Yap">
+        <button (click)="logout()" class="logout-btn" title="Logout">
           <i class="bi bi-box-arrow-right"></i>
         </button>
       </div>

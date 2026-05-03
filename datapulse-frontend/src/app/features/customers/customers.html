@@ -1,0 +1,66 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Customer Management <i class="bi bi-people"></i></h1>
+      <p>View and manage your customers</p>
+    </div>
+    <button class="btn-primary"><i class="bi bi-plus-lg"></i> Add Customer</button>
+  </div>
+
+  <div class="kpi-grid">
+    @for (card of summaryCards; track card.label) {
+      <div class="kpi-card">
+        <div class="icon-box" [ngClass]="card.color"><i class="bi {{ card.icon }}"></i></div>
+        <h3>{{ card.value }}</h3>
+        <p>{{ card.label }}</p>
+        <span class="sub">{{ card.change }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="table-card">
+    <div class="table-top">
+      <h3>All Customers</h3>
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Search customers...">
+      </div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>CUSTOMER</th>
+          <th>CITY</th>
+          <th>MEMBERSHIP</th>
+          <th>TOTAL SPEND</th>
+          <th>ORDERS</th>
+          <th>STATUS</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of filtered; track c.id) {
+          <tr>
+            <td>
+              <div class="customer-cell">
+                <div class="avatar">{{ c.initials }}</div>
+                {{ c.name }}
+              </div>
+            </td>
+            <td>{{ c.city }}</td>
+            <td><span class="membership-badge" [ngClass]="c.membership.toLowerCase()">{{ c.membership }}</span></td>
+            <td class="spend">{{ c.totalSpend }}</td>
+            <td>{{ c.orders }}</td>
+            <td><span class="status-dot" [class.active]="c.status === 'Active'">• {{ c.status }}</span></td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn" title="View"><i class="bi bi-eye"></i></button>
+                <button class="icon-btn" title="Edit"><i class="bi bi-pencil"></i></button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

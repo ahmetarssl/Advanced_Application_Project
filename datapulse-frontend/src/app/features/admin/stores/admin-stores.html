@@ -1,0 +1,67 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Store Management <i class="bi bi-shop"></i></h1>
+      <p>Approve and manage all platform stores</p>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <i class="bi bi-search"></i>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search stores...">
+    </div>
+    <div class="tabs">
+      @for (s of statuses; track s) {
+        <button class="tab" [class.active]="filterStatus === s" (click)="filterStatus = s">{{ s }}</button>
+      }
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>STORE NAME</th>
+          <th>OWNER</th>
+          <th>CATEGORY</th>
+          <th>REVENUE</th>
+          <th>PRODUCTS</th>
+          <th>STATUS</th>
+          <th>JOINED</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (s of filtered; track s.id) {
+          <tr>
+            <td class="store-name">{{ s.name }}</td>
+            <td class="muted">{{ s.owner }}</td>
+            <td><span class="tag">{{ s.category }}</span></td>
+            <td class="revenue">{{ s.revenue }}</td>
+            <td>{{ s.products }}</td>
+            <td><span class="status-badge" [ngClass]="s.status.toLowerCase()">• {{ s.status }}</span></td>
+            <td class="muted">{{ s.joinDate }}</td>
+            <td>
+              <div class="action-btns">
+                @if (s.status === 'Pending') {
+                  <button class="btn-approve" (click)="approveStore(s)" title="Approve">
+                    <i class="bi bi-check-lg"></i> Approve
+                  </button>
+                } @else {
+                  <button class="icon-btn" (click)="toggleStore(s)" [title]="s.status === 'Open' ? 'Close Store' : 'Open Store'">
+                    <i class="bi" [class.bi-pause-circle]="s.status === 'Open'" [class.bi-play-circle]="s.status === 'Closed'"></i>
+                  </button>
+                }
+                <button class="icon-btn" title="View Details"><i class="bi bi-eye"></i></button>
+              </div>
+            </td>
+          </tr>
+        }
+        @empty {
+          <tr><td colspan="8" class="empty-row">No stores found.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

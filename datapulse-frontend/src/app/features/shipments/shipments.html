@@ -1,0 +1,56 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Shipments Tracking <i class="bi bi-truck"></i></h1>
+      <p>Monitor all shipments in real-time</p>
+    </div>
+    <button class="btn-primary"><i class="bi bi-plus-lg"></i> Create Shipment</button>
+  </div>
+
+  <div class="kpi-grid">
+    @for (card of summaryCards; track card.label) {
+      <div class="kpi-card">
+        <div class="icon-box" [ngClass]="card.color"><i class="bi {{ card.icon }}"></i></div>
+        <h3>{{ card.value }}</h3>
+        <p>{{ card.label }}</p>
+      </div>
+    }
+  </div>
+
+  <div class="table-card">
+    <div class="table-top">
+      <h3>Shipment List</h3>
+      <div class="filter-tabs">
+        @for (s of statuses; track s) {
+          <button class="tab" [class.active]="filterStatus === s" (click)="filterStatus = s">{{ s }}</button>
+        }
+      </div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>TRACKING ID</th>
+          <th>ORDER</th>
+          <th>CUSTOMER</th>
+          <th>CARRIER</th>
+          <th>DESTINATION</th>
+          <th>STATUS</th>
+          <th>ETA</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (s of filtered; track s.trackingId) {
+          <tr>
+            <td class="tracking-id">{{ s.trackingId }}</td>
+            <td class="order-id">{{ s.orderId }}</td>
+            <td>{{ s.customer }}</td>
+            <td><span class="carrier">{{ s.carrier }}</span></td>
+            <td>{{ s.destination }}</td>
+            <td><span class="status-badge" [ngClass]="s.status.toLowerCase().replace(' ','-')">• {{ s.status }}</span></td>
+            <td class="eta">{{ s.eta }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

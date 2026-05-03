@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Recurse \"c:\\\\Users\\\\Ahmet\\\\Desktop\\\\Advanced_Application_Project\\\\ai-service\")",
+      "Bash(Select-Object FullName, Length)"
+    ]
+  }
+}

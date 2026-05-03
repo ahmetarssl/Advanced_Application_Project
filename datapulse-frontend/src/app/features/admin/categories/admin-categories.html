@@ -1,0 +1,69 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Category Management <i class="bi bi-tags"></i></h1>
+      <p>Manage product category hierarchy</p>
+    </div>
+    <button class="btn-primary" (click)="showModal = true">
+      <i class="bi bi-plus-lg"></i> Add Category
+    </button>
+  </div>
+
+  <div class="search-bar">
+    <div class="search-box">
+      <i class="bi bi-search"></i>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search categories...">
+    </div>
+  </div>
+
+  <div class="categories-grid">
+    @for (cat of filtered; track cat.id) {
+      <div class="cat-card">
+        <div class="cat-icon">{{ cat.icon }}</div>
+        <div class="cat-info">
+          <h4>{{ cat.name }}</h4>
+          @if (cat.parent) {
+            <span class="parent-tag"><i class="bi bi-arrow-return-right"></i> {{ cat.parent }}</span>
+          } @else {
+            <span class="root-tag">Root Category</span>
+          }
+          <div class="product-count">{{ cat.productCount }} products</div>
+        </div>
+        <div class="cat-actions">
+          <button class="icon-btn" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button class="icon-btn danger" (click)="deleteCategory(cat.id)" title="Delete"><i class="bi bi-trash"></i></button>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (showModal) {
+    <div class="modal-overlay" (click)="showModal = false">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Add Category</h3>
+          <button class="close-btn" (click)="showModal = false"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Category Name</label>
+            <input type="text" [(ngModel)]="newCategory.name" placeholder="Category name" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Parent Category (optional)</label>
+            <select [(ngModel)]="newCategory.parent" class="form-input">
+              <option value="">None (Root Category)</option>
+              @for (p of parentCategories; track p.id) {
+                <option [value]="p.name">{{ p.name }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="showModal = false">Cancel</button>
+          <button class="btn-primary" (click)="saveCategory()">Save</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

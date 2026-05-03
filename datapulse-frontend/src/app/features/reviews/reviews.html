@@ -1,0 +1,65 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Reviews Management <i class="bi bi-star"></i></h1>
+      <p>Monitor customer feedback and ratings</p>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    @for (card of summaryCards; track card.label) {
+      <div class="kpi-card">
+        <div class="icon-box" [ngClass]="card.color"><i class="bi {{ card.icon }}"></i></div>
+        <h3>{{ card.value }}</h3>
+        <p>{{ card.label }}</p>
+      </div>
+    }
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <i class="bi bi-search"></i>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search reviews...">
+    </div>
+    <div class="star-filters">
+      <button class="star-btn" [class.active]="filterRating === 0" (click)="filterRating = 0">All</button>
+      @for (r of [5,4,3,2,1]; track r) {
+        <button class="star-btn" [class.active]="filterRating === r" (click)="filterRating = r">
+          {{ r }} <i class="bi bi-star-fill"></i>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="reviews-list">
+    @for (review of filtered; track review.id) {
+      <div class="review-card">
+        <div class="review-header">
+          <div class="reviewer">
+            <div class="avatar">{{ review.initials }}</div>
+            <div>
+              <div class="reviewer-name">{{ review.customer }}</div>
+              <div class="review-product">{{ review.product }}</div>
+            </div>
+          </div>
+          <div class="review-meta">
+            <div class="stars">
+              @for (s of getStars(review.rating); track $index) {
+                <i class="bi" [class.bi-star-fill]="s === 1" [class.bi-star]="s === 0"></i>
+              }
+            </div>
+            <span class="review-date">{{ review.date }}</span>
+          </div>
+        </div>
+        <p class="review-comment">{{ review.comment }}</p>
+        <div class="review-footer">
+          <span class="helpful"><i class="bi bi-hand-thumbs-up"></i> {{ review.helpful }} found helpful</span>
+          <button class="btn-reply"><i class="bi bi-reply"></i> Reply</button>
+        </div>
+      </div>
+    }
+    @empty {
+      <div class="empty-state"><i class="bi bi-star"></i> No reviews found.</div>
+    }
+  </div>
+</div>

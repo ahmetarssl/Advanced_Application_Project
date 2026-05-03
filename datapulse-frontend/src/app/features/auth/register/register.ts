@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -17,25 +18,29 @@ export class Register {
   roleType = 'INDIVIDUAL';
   errorMessage = '';
   successMessage = '';
+  isLoading = false;
 
   private http = inject(HttpClient);
   private router = inject(Router);
 
   onRegister() {
-    this.http.post('http://localhost:8080/api/auth/register', {
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.http.post(`${environment.apiUrl}/auth/register`, {
       email: this.email,
       password: this.password,
-      roleType: this.roleType
+      role: this.roleType
     }).subscribe({
       next: () => {
-        this.errorMessage = '';
+        this.isLoading = false;
         this.successMessage = 'Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...';
         setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
-        this.successMessage = '';
-        this.errorMessage = 'Kayıt başarısız! E-posta kullanımda olabilir.';
-        console.error(err);
+        this.isLoading = false;
+        this.errorMessage = err?.error?.message ?? 'Kayıt başarısız! E-posta kullanımda olabilir.';
       }
     });
   }

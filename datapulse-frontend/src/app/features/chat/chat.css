@@ -1,0 +1,206 @@
+.chat-wrapper {
+  display: flex;
+  gap: 20px;
+  height: calc(100vh - 120px); /* Üst bardan kalan boşluğu doldurur */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Genel Panel Stilleri */
+.chat-panel, .chart-panel {
+  background-color: #F8F7F2; /* Ana Krem Rengi */
+  border: 1px solid #E2DED0;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(26, 42, 58, 0.05);
+}
+
+.chat-panel { flex: 4; } /* Sol taraf biraz daha dar */
+.chart-panel { flex: 5; } /* Sağ taraf (Grafik) biraz daha geniş */
+
+/* Başlık Kısımları (Lacivert Vurgu) */
+.panel-header {
+  background-color: #1A2A3A; /* Derin Lacivert */
+  color: #F8F7F2;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-header h2, .panel-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.secure-badge {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #F8F7F2;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Mesajlaşma Alanı */
+.messages-container {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #F8F7F2;
+}
+
+.message-row { display: flex; }
+.user-row { justify-content: flex-end; }
+
+/* Baloncuk Tasarımları */
+.message-bubble {
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.ai-bubble {
+  background-color: #FFFFFF;
+  color: #1A2A3A;
+  border: 1px solid #E2DED0;
+  border-bottom-left-radius: 2px;
+}
+
+.user-bubble {
+  background-color: #1A2A3A; /* Lacivert */
+  color: #F8F7F2; /* Krem Yazı */
+  border-bottom-right-radius: 2px;
+}
+
+/* Girdi Alanı (Input) */
+.input-area {
+  display: flex;
+  padding: 15px;
+  background-color: #FFFFFF;
+  border-top: 1px solid #E2DED0;
+  gap: 10px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #E2DED0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #F8F7F2;
+  color: #1A2A3A;
+}
+
+.input-area input:focus {
+  outline: none;
+  border-color: #1A2A3A;
+}
+
+.input-area button {
+  background-color: #1A2A3A;
+  color: #F8F7F2;
+  border: none;
+  border-radius: 8px;
+  width: 45px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.input-area button:hover { opacity: 0.9; }
+
+/* Sağ Taraf Grafik Yertutucusu */
+.chart-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFFFFF;
+  padding: 20px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #8C98A4;
+}
+
+.empty-state i {
+  font-size: 40px;
+  margin-bottom: 10px;
+  display: block;
+  opacity: 0.5;
+}
+
+/* Sahte CSS Grafiği */
+.mock-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+  height: 250px;
+  width: 100%;
+  max-width: 400px;
+  border-bottom: 2px solid #1A2A3A;
+  padding-bottom: 5px;
+}
+
+.mock-chart .bar {
+  flex: 1;
+  background: linear-gradient(to top, #1A2A3A, #3A5A7A);
+  border-radius: 4px 4px 0 0;
+  animation: growUp 1s ease-out forwards;
+  transform-origin: bottom;
+}
+
+@keyframes growUp {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.chart-caption {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #8C98A4;
+  font-weight: 500;
+}
+
+/* Yazıyor Animasyonu (Typing) */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 15px 16px;
+}
+
+.typing-indicator .dot {
+  width: 6px;
+  height: 6px;
+  background-color: #1A2A3A;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator .dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator .dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}

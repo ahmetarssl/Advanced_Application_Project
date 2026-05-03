@@ -1,0 +1,78 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Profile Settings <i class="bi bi-person-circle"></i></h1>
+      <p>Manage your account information</p>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    <div class="profile-card">
+      <div class="avatar-section">
+        <div class="big-avatar">{{ getInitials() }}</div>
+        <div>
+          <h3>{{ user.name }}</h3>
+          <span class="role-tag">{{ user.role }}</span>
+          <p class="email-text">{{ user.email }}</p>
+        </div>
+      </div>
+
+      @if (saveSuccess) {
+        <div class="alert-success"><i class="bi bi-check-circle-fill"></i> Profile updated!</div>
+      }
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" [(ngModel)]="user.name" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="user.email" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="text" [(ngModel)]="user.phone" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" [(ngModel)]="user.city" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>Bio</label>
+        <textarea [(ngModel)]="user.bio" class="form-input" rows="3"></textarea>
+      </div>
+      <button class="btn-save" (click)="onSaveProfile()"><i class="bi bi-check-lg"></i> Save Profile</button>
+    </div>
+
+    <div class="profile-card">
+      <h3 class="section-title"><i class="bi bi-shield-lock"></i> Change Password</h3>
+
+      @if (pwSuccess) {
+        <div class="alert-success"><i class="bi bi-check-circle-fill"></i> Password changed successfully!</div>
+      }
+      @if (pwError) {
+        <div class="alert-error"><i class="bi bi-exclamation-circle-fill"></i> {{ pwError }}</div>
+      }
+
+      <div class="form-group">
+        <label>Current Password</label>
+        <input type="password" [(ngModel)]="passwords.current" placeholder="••••••••" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" [(ngModel)]="passwords.newPass" placeholder="••••••••" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>Confirm New Password</label>
+        <input type="password" [(ngModel)]="passwords.confirm" placeholder="••••••••" class="form-input">
+      </div>
+      <button class="btn-save" (click)="onChangePassword()"><i class="bi bi-lock"></i> Change Password</button>
+
+      <div class="danger-zone">
+        <h4><i class="bi bi-exclamation-triangle"></i> Danger Zone</h4>
+        <p>Once you delete your account, there is no going back.</p>
+        <button class="btn-danger">Delete Account</button>
+      </div>
+    </div>
+  </div>
+</div>

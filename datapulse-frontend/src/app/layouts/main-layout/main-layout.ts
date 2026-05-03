@@ -1,18 +1,26 @@
-import { Component, inject } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
+import { Component, inject, computed } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, CommonModule],
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.css']
 })
 export class MainLayout {
-  private router = inject(Router);
+  auth = inject(AuthService);
+
+  userName = this.auth.userName;
+  role = this.auth.role;
+
+  isAdmin = computed(() => this.auth.isRole('ADMIN'));
+  isCorporate = computed(() => this.auth.isRole('CORPORATE'));
+  isIndividual = computed(() => this.auth.isRole('INDIVIDUAL'));
 
   logout() {
-    localStorage.removeItem('access');
-    this.router.navigate(['/login']);
+    this.auth.logout();
   }
 }

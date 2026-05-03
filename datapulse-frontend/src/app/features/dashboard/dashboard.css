@@ -98,21 +98,24 @@
   font-weight: 500;
 }
 
-/* Grafik Alanı (Şimdilik Yer Tutucu) */
-.chart-section h3 {
-  font-size: 16px;
-  color: #ffffff;
-  margin-bottom: 15px;
-  font-weight: 600;
+.charts-row {
+  display: flex;
+  gap: 20px;
 }
 
-.chart-box {
+.chart-section {
   background-color: #151521;
   border: 1px solid #1e1e2d;
   border-radius: 12px;
-  height: 350px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #565674;
+  padding: 20px;
+}
+
+.chart-section.large { flex: 2; }
+.chart-section.small { flex: 1; }
+
+.chart-section h3 {
+  font-size: 16px;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  font-weight: 600;
 }

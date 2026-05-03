@@ -20,11 +20,24 @@
     }
   </div>
 
-  <div class="chart-section">
-    <h3>Revenue Overview</h3>
-    <div class="chart-box">
-      <p class="text-muted"><i class="bi bi-bar-chart"></i> Satış Grafiği Buraya Gelecek</p>
+ <div class="charts-row">
+    <div class="chart-section large">
+      <h3>Revenue Overview</h3>
+      @if (revenueChartData) {
+        <!-- KORUYUCU KALKAN BURADA -->
+        <div style="height: 300px; position: relative; width: 100%;">
+          <app-chart-wrapper type="line" [data]="revenueChartData" />
+        </div>
+      }
+    </div>
+
+    <div class="chart-section small">
+      <h3>Sales by Category</h3>
+      @if (categoryChartData) {
+        <!-- KORUYUCU KALKAN BURADA -->
+        <div style="height: 300px; position: relative; width: 100%;">
+          <app-chart-wrapper type="doughnut" [data]="categoryChartData" />
+        </div>
+      }
     </div>
   </div>
-
-</div>

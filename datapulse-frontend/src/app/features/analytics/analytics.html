@@ -1,0 +1,74 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Analytics Dashboard <i class="bi bi-graph-up-arrow"></i></h1>
+      <p>Deep insights into your store performance</p>
+    </div>
+    <div class="header-actions">
+      <select [(ngModel)]="selectedRange" (change)="onRangeChange()" class="range-select">
+        @for (r of ranges; track r.value) {
+          <option [value]="r.value">{{ r.label }}</option>
+        }
+      </select>
+      <button class="btn-export"><i class="bi bi-download"></i> Export Report</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    @for (card of summaryCards; track card.title) {
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="icon-box" [ngClass]="card.color">
+            <i class="bi {{ card.icon }}"></i>
+          </div>
+          <span class="change-badge" [class.positive]="card.positive" [class.negative]="!card.positive">
+            {{ card.change }}
+          </span>
+        </div>
+        <h3>{{ card.value }}</h3>
+        <p>{{ card.title }}</p>
+      </div>
+    }
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-card large">
+      <h3>Sales Trends</h3>
+      <app-chart-wrapper type="line" [data]="salesTrendData" />
+    </div>
+    <div class="chart-card small">
+      <h3>Categories</h3>
+      <app-chart-wrapper type="doughnut" [data]="categoryData" />
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h3>Top Performing Products</h3>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Revenue</th>
+          <th>Units Sold</th>
+          <th>Growth</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of topProducts; track p.name; let i = $index) {
+          <tr>
+            <td class="rank">{{ i + 1 }}</td>
+            <td class="product-name">{{ p.name }}</td>
+            <td><span class="tag">{{ p.category }}</span></td>
+            <td class="revenue">{{ p.revenue }}</td>
+            <td>{{ p.units }}</td>
+            <td class="growth positive">{{ p.growth }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

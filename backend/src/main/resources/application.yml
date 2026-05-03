@@ -1,9 +1,25 @@
+server:
+  port: 8080
+
 spring:
+  # ---- IKI AYRI DATASOURCE (AI GÜVENLİĞİ İÇİN) ----
   datasource:
-    url: jdbc:postgresql://localhost:5432/datapulse
-    username: postgres
-    password: 1234
-    driver-class-name: org.postgresql.Driver
+    app:
+      jdbc-url: jdbc:postgresql://localhost:5432/datapulse
+      username: postgres
+      password: 1234
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        pool-name: AppPool
+
+    ai-readonly:
+      jdbc-url: jdbc:postgresql://localhost:5432/datapulse
+      username: ai_readonly
+      password: CHANGE_ME_strong_password_2026!
+      driver-class-name: org.postgresql.Driver
+      hikari:
+        pool-name: AiReadOnlyPool
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,12 +29,16 @@ spring:
         format_sql: true
     open-in-view: false
 
+# ---- JWT VE CORS AYARLARIN ----
 app:
   jwt:
-    # JWT için gerekli olan minimum 32 karakterlik (Base64) güvenlik anahtarı
     secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
     access-token-expiration: 900000
     refresh-token-expiration: 604800000
+  
+  # ChatService.java'nın aradığı AI servisi bağlantı ayarı
+  ai-service:
+    base-url: http://localhost:8001
 
 cors:
   allowed-origins: http://localhost:4200
