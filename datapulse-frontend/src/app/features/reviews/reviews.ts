@@ -1,11 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 interface Review {
-  id: number;
+  id?: number; // Veritabanından geleceği için opsiyonel yapıyoruz
   customer: string;
   initials: string;
   product: string;
@@ -13,6 +13,14 @@ interface Review {
   comment: string;
   date: string;
   helpful: number;
+}
+
+// Özet kartları için tip güvenliği (Type Safety) sağlıyoruz
+interface SummaryCard {
+  label: string;
+  value: string | number;
+  icon: string;
+  color: string;
 }
 
 @Component({
@@ -24,30 +32,23 @@ interface Review {
 })
 export class Reviews implements OnInit {
   private http = inject(HttpClient);
-
+  private cdr = inject(ChangeDetectorRef);
   filterRating = 0;
   searchTerm = '';
 
-  summaryCards = [
-    { label: 'Avg Rating',  value: '4.8', icon: 'bi-star-fill',   color: 'icon-yellow' },
-    { label: 'Total Reviews', value: '2,841', icon: 'bi-chat-left-text', color: 'icon-blue' },
-    { label: '5-Star Reviews', value: '68%', icon: 'bi-emoji-smile', color: 'icon-green' },
-    { label: 'Pending Response', value: '12', icon: 'bi-clock', color: 'icon-orange' },
-  ];
-
-  reviews: Review[] = [
-    { id: 1, customer: 'Sarah Miller',  initials: 'SM', product: 'Classic Cotton T-Shirt',  rating: 5, comment: 'Amazing quality! The fabric is so soft and the fit is perfect.', date: 'Dec 2, 2024', helpful: 14 },
-    { id: 2, customer: 'James Wilson',  initials: 'JW', product: 'Wireless Headphones',     rating: 4, comment: 'Great sound quality, comfortable to wear. Battery life could be better.', date: 'Dec 1, 2024', helpful: 8 },
-    { id: 3, customer: 'Emily Johnson', initials: 'EJ', product: 'Smart Watch Series X',    rating: 5, comment: 'Best smartwatch I have ever owned. Highly recommend!', date: 'Nov 30, 2024', helpful: 22 },
-    { id: 4, customer: 'Mike Brown',    initials: 'MB', product: 'Leather Handbag',         rating: 3, comment: 'Good product but the strap feels a bit flimsy.', date: 'Nov 29, 2024', helpful: 3 },
-    { id: 5, customer: 'Anna Davis',    initials: 'AD', product: 'Running Sneakers Pro',    rating: 5, comment: 'Super comfortable! Used them in a marathon and my feet did not hurt at all.', date: 'Nov 28, 2024', helpful: 31 },
-    { id: 6, customer: 'Chris Lee',     initials: 'CL', product: 'Designer Sunglasses',     rating: 2, comment: 'The quality does not match the price. Expected better.', date: 'Nov 27, 2024', helpful: 6 },
-  ];
+  // 1. Mock verileri uçurduk, boş listelerle başlıyoruz
+  summaryCards: SummaryCard[] = [];
+  reviews: Review[] = [];
 
   get filtered(): Review[] {
     return this.reviews.filter(r => {
       const matchRating = this.filterRating === 0 || r.rating === this.filterRating;
-      const matchSearch = !this.searchTerm || r.customer.toLowerCase().includes(this.searchTerm.toLowerCase()) || r.product.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+      // Veritabanından müşteri veya ürün adının boş (null) gelme ihtimaline karşı güvenlik kalkanı
+      const matchSearch = !this.searchTerm ||
+        (r.customer && r.customer.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+        (r.product && r.product.toLowerCase().includes(this.searchTerm.toLowerCase()));
+
       return matchRating && matchSearch;
     });
   }
@@ -57,9 +58,44 @@ export class Reviews implements OnInit {
   }
 
   ngOnInit() {
+    // Sayfa yüklendiğinde verileri backend'den iste
+    this.loadReviews();
+    this.loadSummaryCards();
+  }
+
+  // 2. Yorumları Veritabanından Çekme İşlemi
+  loadReviews() {
     this.http.get<any>(`${environment.apiUrl}/reviews`).subscribe({
-      next: (data) => { if (data?.content) this.reviews = data.content; },
-      error: () => {}
+      next: (data) => {
+        // Backend'in dönüş yapısına göre (Spring Data JPA page veya List)
+        this.reviews = data?.content ? data.content : data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Yorumlar getirilirken hata oluştu:', err)
     });
+  }
+
+  // 3. Üstteki 4'lü İstatistik Kartlarını Çekme İşlemi
+  loadSummaryCards() {
+    this.http.get<any>(`${environment.apiUrl}/reviews/stats`).subscribe({
+      next: (data) => {
+        if (data) this.summaryCards = data;
+      },
+      error: (err) => console.error('Yorum istatistikleri getirilirken hata oluştu:', err)
+    });
+  }
+
+  // 4. (Ekstra) Uygunsuz Yorumları Silme İşlemi
+  deleteReview(id: number) {
+    if (confirm('Bu yorumu tamamen silmek istediğinize emin misiniz?')) {
+      this.http.delete(`${environment.apiUrl}/reviews/${id}`).subscribe({
+        next: () => {
+          // Backend'den başarıyla silinirse arayüzdeki listeden de kaldırıyoruz
+          this.reviews = this.reviews.filter(r => r.id !== id);
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error('Yorum silinemedi:', err)
+      });
+    }
   }
 }

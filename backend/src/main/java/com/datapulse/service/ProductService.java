@@ -8,12 +8,16 @@ import com.datapulse.repository.ProductRepository;
 import com.datapulse.repository.StoreRepository;
 import com.datapulse.web.dto.PageResponse;
 import com.datapulse.web.dto.ProductResponse;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -49,5 +53,17 @@ public class ProductService {
         String icon = (p.getIcon() != null) ? p.getIcon() : "📦";
         return new ProductResponse(p.getId(), p.getName(), categoryName, p.getSku(),
                 p.getUnitPrice(), p.getStock() != null ? p.getStock() : 0, icon);
+    }
+    // Mevcut metodun altına ekle
+    public void decreaseStock(Long productId, Integer quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Ürün bulunamadı: " + productId));
+
+        if (product.getStock() < quantity) {
+            throw new RuntimeException("Yetersiz stok! Mevcut: " + product.getStock());
+        }
+
+        product.setStock(product.getStock() - quantity);
+        productRepository.save(product);
     }
 }

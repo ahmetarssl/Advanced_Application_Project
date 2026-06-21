@@ -38,11 +38,16 @@
             </span>
           </div>
           <span class="category-tag">{{ p.category }}</span>
+          <!-- Sepete Ekle Butonu -->
+<button (click)="cart.add(p)"
+        class="w-full mt-2 py-2 bg-blue-600 hover:bg-blue-500 rounded text-sm font-semibold">
+  🛒 Sepete Ekle
+</button>
         </div>
         @if (canManage()) {
           <div class="card-actions">
             <button class="icon-btn" (click)="openEdit(p)" title="Edit"><i class="bi bi-pencil"></i></button>
-            <button class="icon-btn danger" (click)="deleteProduct(p.id)" title="Delete"><i class="bi bi-trash"></i></button>
+            <button class="icon-btn danger" (click)="deleteProduct(p.id!)" title="Delete"><i class="bi bi-trash"></i></button>
           </div>
         }
       </div>

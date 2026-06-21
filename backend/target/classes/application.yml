@@ -27,6 +27,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+        enable_lazy_load_no_trans: true # <--- İŞTE BİZİ KURTARACAK HİLE KODU BURADA!
     open-in-view: false
 
 # ---- JWT VE CORS AYARLARIN ----
@@ -42,3 +43,8 @@ app:
 
 cors:
   allowed-origins: http://localhost:4200
+
+# Logging hizalaması düzeltildi
+logging:
+  level:
+    org.springframework.security: DEBUG

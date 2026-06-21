@@ -1,17 +1,25 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
 interface Shipment {
-  trackingId: string;
+  trackingId: string; // Genelde kargolarda ID yerine Takip No (Tracking ID) kullanılır
   orderId: string;
   customer: string;
   carrier: string;
   destination: string;
   status: 'In Transit' | 'Processing' | 'Delivered' | 'Returned';
   eta: string;
+}
+
+// Kartlar için de tip güvenliği (Type Safety) sağlıyoruz
+interface SummaryCard {
+  label: string;
+  value: string | number;
+  icon: string;
+  color: string;
 }
 
 @Component({
@@ -23,35 +31,56 @@ interface Shipment {
 })
 export class Shipments implements OnInit {
   private http = inject(HttpClient);
-
-  summaryCards = [
-    { label: 'Pending',    value: '156', icon: 'bi-hourglass-split', color: 'icon-yellow' },
-    { label: 'In Transit', value: '423', icon: 'bi-truck',           color: 'icon-blue'   },
-    { label: 'Delivered',  value: '1,247', icon: 'bi-check-circle', color: 'icon-green'  },
-    { label: 'Returns',    value: '23',  icon: 'bi-arrow-return-left', color: 'icon-orange' },
-  ];
-
+  private cdr = inject(ChangeDetectorRef);
   filterStatus = 'All';
   statuses = ['All', 'In Transit', 'Processing', 'Delivered', 'Returned'];
 
-  shipments: Shipment[] = [
-    { trackingId: 'TRK-892341', orderId: '#7820', customer: 'James Wilson',  carrier: 'FedEx', destination: 'Los Angeles, CA', status: 'In Transit',  eta: 'Dec 4' },
-    { trackingId: 'TRK-892340', orderId: '#7819', customer: 'Emily Johnson', carrier: 'UPS',   destination: 'Chicago, IL',     status: 'Processing',  eta: 'Dec 5' },
-    { trackingId: 'TRK-892339', orderId: '#7815', customer: 'Michael Lee',   carrier: 'DHL',   destination: 'Miami, FL',       status: 'Delivered',   eta: 'Dec 1' },
-    { trackingId: 'TRK-892338', orderId: '#7814', customer: 'Sarah Miller',  carrier: 'FedEx', destination: 'New York, NY',    status: 'In Transit',  eta: 'Dec 4' },
-    { trackingId: 'TRK-892337', orderId: '#7810', customer: 'Anna Davis',    carrier: 'USPS',  destination: 'Phoenix, AZ',     status: 'Delivered',   eta: 'Dec 2' },
-    { trackingId: 'TRK-892336', orderId: '#7808', customer: 'Chris Lee',     carrier: 'UPS',   destination: 'San Antonio, TX', status: 'Returned',    eta: '-'     },
-  ];
+  // 1. Mock verileri tamamen sildik, boş dizilerle başlatıyoruz.
+  summaryCards: SummaryCard[] = [];
+  shipments: Shipment[] = [];
 
   get filtered(): Shipment[] {
     if (this.filterStatus === 'All') return this.shipments;
-    return this.shipments.filter(s => s.status === this.filterStatus);
+    // Veritabanından status'ün null gelme ihtimaline karşı ufak bir güvenlik kontrolü
+    return this.shipments.filter(s => s.status && s.status === this.filterStatus);
   }
 
   ngOnInit() {
+    // Sayfa açıldığında hem listeyi hem de istatistikleri eş zamanlı çekiyoruz
+    this.loadShipments();
+    this.loadSummaryCards();
+  }
+
+  // 2. Kargo Listesini Veritabanından Çeken Fonksiyon
+  loadShipments() {
     this.http.get<any>(`${environment.apiUrl}/shipments`).subscribe({
-      next: (data) => { if (data?.content) this.shipments = data.content; },
-      error: () => {}
+      next: (data) => {
+        // Backend'in dönüş tipine göre (Spring Data JPA page dönüyorsa data.content, List dönüyorsa data)
+        this.shipments = data?.content ? data.content : data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Kargolar veritabanından getirilirken hata oluştu:', err)
+    });
+  }
+
+  // 3. Üstteki 4'lü İstatistik Kartlarını Dolduran Fonksiyon
+  loadSummaryCards() {
+    this.http.get<any>(`${environment.apiUrl}/shipments/stats`).subscribe({
+      next: (data) => {
+        if (data) this.summaryCards = data;
+      },
+      error: (err) => console.error('Kargo istatistikleri getirilirken hata oluştu:', err)
+    });
+  }
+
+  // 4. (Ekstra) Kargo Durumunu Güncelleme Metodu
+  // Yönetici arayüzünde "Kargoya Verildi" vs. butonlarına tıklanınca çalışması için
+  updateShipmentStatus(trackingId: string, newStatus: string) {
+    this.http.patch(`${environment.apiUrl}/shipments/${trackingId}/status`, { status: newStatus }).subscribe({
+      next: () => {
+        this.loadShipments(); // Güncelleme başarılı olursa listeyi veritabanından tekrar çek
+      },
+      error: (err) => console.error('Kargo durumu güncellenemedi:', err)
     });
   }
 }

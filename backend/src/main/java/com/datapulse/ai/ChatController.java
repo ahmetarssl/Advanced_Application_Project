@@ -17,7 +17,7 @@ public class ChatController {
     private final ChatService chatService;
 
     @PostMapping("/ask")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CORPORATE', 'INDIVIDUAL')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ChatService.ChatResponse> ask(@Valid @RequestBody AskRequest req) {
         return ResponseEntity.ok(chatService.ask(req.question()));
     }

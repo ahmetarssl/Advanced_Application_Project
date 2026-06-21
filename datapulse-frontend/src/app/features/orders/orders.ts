@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, computed } from '@angular/core';
+import { Component, inject, OnInit, computed, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -6,11 +6,11 @@ import { AuthService } from '../../core/auth/auth.service';
 import { environment } from '../../../environments/environment';
 
 interface Order {
-  id: string;
+  id?: string | number; // Veritabanından geleceği için esnek bıraktık
   customer: string;
   initials: string;
   products: number;
-  total: string;
+  total: string | number; // Backend'den sayı (number) olarak da gelebilir
   date: string;
   status: 'Completed' | 'Shipped' | 'Pending' | 'Cancelled';
 }
@@ -24,6 +24,7 @@ interface Order {
 })
 export class Orders implements OnInit {
   private http = inject(HttpClient);
+  private cdr = inject(ChangeDetectorRef);
   auth = inject(AuthService);
 
   isCorporateOrAdmin = computed(() => this.auth.isRole('ADMIN', 'CORPORATE'));
@@ -34,33 +35,53 @@ export class Orders implements OnInit {
 
   statuses = ['All Status', 'Completed', 'Shipped', 'Pending', 'Cancelled'];
 
-  allOrders: Order[] = [
-    { id: '#ORD-7821', customer: 'Sarah Miller',   initials: 'SM', products: 3, total: '$284.00', date: 'Dec 2, 2024', status: 'Completed' },
-    { id: '#ORD-7820', customer: 'James Wilson',   initials: 'JW', products: 2, total: '$156.50', date: 'Dec 2, 2024', status: 'Shipped' },
-    { id: '#ORD-7819', customer: 'Emily Johnson',  initials: 'EJ', products: 5, total: '$432.00', date: 'Dec 1, 2024', status: 'Pending' },
-    { id: '#ORD-7818', customer: 'Mike Brown',     initials: 'MB', products: 1, total: '$89.99',  date: 'Dec 1, 2024', status: 'Cancelled' },
-    { id: '#ORD-7817', customer: 'Anna Davis',     initials: 'AD', products: 4, total: '$315.20', date: 'Nov 30, 2024', status: 'Completed' },
-    { id: '#ORD-7816', customer: 'Chris Lee',      initials: 'CL', products: 2, total: '$199.00', date: 'Nov 30, 2024', status: 'Shipped' },
-    { id: '#ORD-7815', customer: 'Lisa Martinez',  initials: 'LM', products: 3, total: '$267.80', date: 'Nov 29, 2024', status: 'Completed' },
-    { id: '#ORD-7814', customer: 'Tom Anderson',   initials: 'TA', products: 1, total: '$45.00',  date: 'Nov 29, 2024', status: 'Pending' },
-  ];
+  // 1. Mock verileri tamamen sildik, boş bir dizi ile başlatıyoruz.
+  allOrders: Order[] = [];
 
   get filteredOrders(): Order[] {
     return this.allOrders.filter(o => {
       const matchStatus = this.filterStatus === 'All Status' || o.status === this.filterStatus;
-      const matchSearch = !this.searchTerm || o.customer.toLowerCase().includes(this.searchTerm.toLowerCase()) || o.id.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+      // DB'den gelen verilerde null değer olma ihtimaline karşı güvenlik önlemi ekledik (o.customer && ...)
+      const matchSearch = !this.searchTerm ||
+        (o.customer && o.customer.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+        (o.id && o.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase()));
+
       return matchStatus && matchSearch;
     });
   }
 
   ngOnInit() {
+    // Sayfa açılır açılmaz veritabanına istek at
+    this.loadOrders();
+  }
+
+  // 2. Veritabanından Siparişleri Çeken Ana Fonksiyon
+  loadOrders() {
     this.http.get<any>(`${environment.apiUrl}/orders`).subscribe({
-      next: (data) => { if (data?.content) this.allOrders = data.content; },
-      error: () => {}
+      next: (data) => {
+        // Backend'in dönüş tipine göre (Spring Boot pagination veya doğrudan liste dönebilir) ayarlama yapıyoruz.
+        this.allOrders = data?.content ? data.content : data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Siparişler veritabanından getirilirken hata oluştu:', err);
+      }
+    });
+  }
+
+  // (Opsiyonel) 3. Sipariş Durumunu Güncelleme Metodu
+  // Eğer arayüzde statüsü "Kargolandı" vs. yapmak için bir buton eklersen bu fonksiyonu çağırabilirsin.
+  updateOrderStatus(orderId: string | number, newStatus: string) {
+    this.http.patch(`${environment.apiUrl}/orders/${orderId}/status`, { status: newStatus }).subscribe({
+      next: () => {
+        this.loadOrders(); // Başarılı olursa listeyi veritabanından tekrar çek ve yenile
+      },
+      error: (err) => console.error('Sipariş durumu güncellenemedi:', err)
     });
   }
 
   getStatusClass(status: string): string {
-    return status.toLowerCase();
+    return status ? status.toLowerCase() : '';
   }
 }

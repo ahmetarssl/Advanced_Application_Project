@@ -7,6 +7,7 @@ import com.datapulse.repository.CustomerProfileRepository;
 import com.datapulse.repository.OrderRepository;
 import com.datapulse.repository.ReviewRepository;
 import com.datapulse.repository.StoreRepository;
+import com.datapulse.web.dto.ChartDto; // Yeni import
 import com.datapulse.web.dto.DashboardStatsResponse;
 import com.datapulse.web.dto.KpiDto;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays; // Yeni import
 import java.util.List;
 import java.util.Locale;
 
@@ -34,7 +36,7 @@ public class DashboardService {
     }
 
     public DashboardStatsResponse getStats(User user) {
-        List<KpiDto> kpis = new ArrayList<>();
+        List<KpiDto> kpis;
 
         if (user.getRoleType() == Role.ADMIN) {
             kpis = buildAdminKpis();
@@ -44,7 +46,19 @@ public class DashboardService {
             kpis = buildIndividualKpis(user);
         }
 
-        return new DashboardStatsResponse(kpis);
+        // --- GRAFİK VERİLERİ BURADA OLUŞTURULUYOR ---
+        ChartDto revenueChart = new ChartDto(
+            Arrays.asList("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"),
+            Arrays.asList(3200, 4500, 2900, 5100, 4800, 7200, 6100)
+        );
+
+        ChartDto categoryChart = new ChartDto(
+            Arrays.asList("Fashion", "Electronics", "Home", "Beauty", "Sports"),
+            Arrays.asList(35, 25, 20, 10, 10)
+        );
+
+        // Güncellenmiş constructor ile her şeyi paketleyip dönüyoruz
+        return new DashboardStatsResponse(kpis, revenueChart, categoryChart);
     }
 
     private List<KpiDto> buildAdminKpis() {

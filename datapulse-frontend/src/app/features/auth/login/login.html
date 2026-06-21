@@ -1,23 +1,80 @@
-<div class="login-container">
-  <div class="login-box">
-    <h2>DataPulse'a Giriş Yap</h2>
+<div class="auth-page">
+  <!-- Köşe Dekorasyonları -->
+  <div class="deco deco-top-right">
+    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+      <circle cx="130" cy="30" r="90" stroke="#1e2d3c" stroke-width="1.5" fill="none" stroke-dasharray="6 4"/>
+      <circle cx="130" cy="30" r="55" stroke="#1e2d3c" stroke-width="1" fill="none" opacity="0.5"/>
+    </svg>
+  </div>
+  <div class="deco deco-bottom-left">
+    <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+      <circle cx="30" cy="170" r="110" stroke="#1e2d3c" stroke-width="1.5" fill="none" stroke-dasharray="6 4"/>
+      <circle cx="30" cy="170" r="70" fill="rgba(30,45,60,0.12)"/>
+    </svg>
+  </div>
 
-    <div class="error-box" *ngIf="errorMessage">
-      {{ errorMessage }}
+  <!-- İçerik -->
+  <div class="auth-content">
+    <div class="auth-logo">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+        <circle cx="26" cy="26" r="25" stroke="#1e2d3c" stroke-width="2" fill="none"/>
+        <path d="M26 10 C18 16, 14 22, 18 28 C22 34, 30 30, 34 36 C38 42, 34 46, 26 44" stroke="#1e2d3c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M18 18 C24 14, 32 14, 36 20" stroke="#7a9bb5" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="26" cy="26" r="3" fill="#1e2d3c"/>
+      </svg>
+    </div>
+    <h1 class="auth-title">HOŞ GELDİNİZ</h1>
+    <p class="auth-subtitle">HESABINIZA GİRİŞ YAPIN</p>
+
+    <div class="auth-card">
+      @if (errorMessage) {
+        <div class="error-box">
+          <i class="bi bi-exclamation-circle"></i> {{ errorMessage }}
+        </div>
+      }
+
+      <form (ngSubmit)="onLogin()">
+        <div class="form-group">
+          <label>E-posta Adresi</label>
+          <div class="input-wrapper">
+            <i class="bi bi-person input-icon"></i>
+            <input type="email" name="email" [(ngModel)]="email" required placeholder="ad.soyad@email.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Şifre</label>
+          <div class="input-wrapper">
+            <i class="bi bi-lock input-icon"></i>
+            <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password" required placeholder="••••••••">
+            <button type="button" class="eye-btn" (click)="showPassword = !showPassword">
+              <i class="bi" [class.bi-eye-slash]="showPassword" [class.bi-eye]="!showPassword"></i>
+            </button>
+          </div>
+          <div class="forgot-row">
+            <a href="#" class="forgot-link">Şifrenizi mi unuttunuz?</a>
+          </div>
+        </div>
+
+        <div class="remember-row">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe">
+            <span class="checkmark"></span>
+            Beni hatırla
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="isLoading">
+          @if (!isLoading) { <span>GİRİŞ YAP</span> }
+          @if (isLoading) { <span><i class="bi bi-arrow-repeat spin"></i> Giriş yapılıyor...</span> }
+        </button>
+      </form>
+
+      <div class="divider"><span>veya</span></div>
     </div>
 
-    <form (ngSubmit)="onLogin()">
-      <div class="form-group">
-        <label>E-posta Adresi</label>
-        <input type="email" name="email" [(ngModel)]="email" required placeholder="ornek@email.com">
-      </div>
-
-      <div class="form-group">
-        <label>Şifre</label>
-        <input type="password" name="password" [(ngModel)]="password" required placeholder="Şifrenizi girin">
-      </div>
-
-      <button type="submit" class="login-btn">Giriş Yap</button>
-    </form>
+    <p class="switch-link">
+      Hesabınız yok mu? <a routerLink="/register"><strong>Kayıt Olun</strong></a>
+    </p>
   </div>
 </div>

@@ -1,7 +1,7 @@
-/* Tarayıcının varsayılan boşluklarını sıfırla ve arka planı karanlık yap */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: #0f111a;
+  background-color: #f2ece4;
+  font-family: 'Segoe UI', 'Inter', sans-serif;
 }

@@ -33,6 +33,16 @@
       </a>
     </nav>
 
+    <!-- Sepetim Linki Buraya -->
+      <a routerLink="/cart" routerLinkActive="active" class="nav-item">
+        <i class="bi bi-cart-fill"></i> Sepetim
+        @if (cart.count() > 0) {
+          <span class="badge neon-pink" style="margin-left: auto;">
+            {{ cart.count() }}
+          </span>
+        }
+      </a>
+
     @if (isAdmin() || isCorporate()) {
       <div class="menu-section mt-4">MANAGEMENT</div>
       <nav class="nav-menu">

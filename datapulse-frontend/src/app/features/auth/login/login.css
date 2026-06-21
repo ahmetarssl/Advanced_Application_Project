@@ -1,73 +1,234 @@
-.login-container {
+.auth-page {
+  min-height: 100vh;
+  background-color: #f2ece4;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f4f7f6;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
 }
 
-.login-box {
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+/* Köşe Dekorasyonları */
+.deco { position: absolute; pointer-events: none; }
+.deco-top-right { top: -20px; right: -20px; }
+.deco-bottom-left { bottom: -30px; left: -30px; }
+
+/* İçerik */
+.auth-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  padding: 0 20px;
+  z-index: 1;
 }
 
-h2 {
+.auth-logo {
+  margin-bottom: 18px;
+  opacity: 0.9;
+}
+
+.auth-title {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #1e2d3c;
+  margin: 0 0 6px;
   text-align: center;
-  color: #333;
-  margin-bottom: 25px;
 }
 
+.auth-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  color: #7a8a96;
+  margin: 0 0 28px;
+  text-align: center;
+}
+
+/* Kart */
+.auth-card {
+  width: 100%;
+  background-color: #e8dfd5;
+  border-radius: 18px;
+  padding: 32px 36px 24px;
+  box-shadow: 0 8px 30px rgba(30, 45, 60, 0.1);
+}
+
+/* Form */
 .form-group {
   margin-bottom: 20px;
 }
 
-label {
+.form-group label {
   display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3d3830;
   margin-bottom: 8px;
-  color: #666;
-  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
-input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-sizing: border-box;
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: #8a8078;
   font-size: 16px;
+  pointer-events: none;
 }
 
-input:focus {
-  border-color: #007bff;
+.input-wrapper input {
+  width: 100%;
+  padding: 13px 44px 13px 42px;
+  background: #ffffff;
+  border: 1.5px solid #d4c9bb;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1e2d3c;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
   outline: none;
 }
 
-.login-btn {
-  width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
+.input-wrapper input::placeholder { color: #b0a898; }
+.input-wrapper input:focus { border-color: #1e2d3c; }
+
+.eye-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
   border: none;
-  border-radius: 6px;
-  font-size: 16px;
+  color: #8a8078;
   cursor: pointer;
-  transition: background-color 0.3s;
+  padding: 4px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+}
+.eye-btn:hover { color: #1e2d3c; }
+
+.forgot-row {
+  text-align: right;
+  margin-top: 6px;
+}
+.forgot-link {
+  font-size: 12px;
+  color: #8a8078;
+  text-decoration: none;
+}
+.forgot-link:hover { color: #1e2d3c; text-decoration: underline; }
+
+/* Checkbox */
+.remember-row { margin-bottom: 22px; }
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #3d3830;
+  cursor: pointer;
+  user-select: none;
 }
 
-.login-btn:hover {
-  background-color: #0056b3;
+.checkbox-label input[type="checkbox"] { display: none; }
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #b0a898;
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
 }
 
-.error-box {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 15px;
+.checkbox-label input:checked + .checkmark {
+  background: #1e2d3c;
+  border-color: #1e2d3c;
+}
+
+.checkbox-label input:checked + .checkmark::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+  display: block;
+}
+
+/* Giriş Butonu */
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background-color: #1e2d3c;
+  color: #f2ece4;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 4px 14px rgba(30, 45, 60, 0.25);
+}
+.btn-submit:hover:not(:disabled) { background: #2d4155; transform: translateY(-1px); }
+.btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+  color: #b0a898;
+  font-size: 13px;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #c8bfb4;
+}
+
+/* Alt Link */
+.switch-link {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #6b6358;
   text-align: center;
 }
+.switch-link a { color: #1e2d3c; text-decoration: none; }
+.switch-link a:hover { text-decoration: underline; }
+
+/* Error */
+.error-box {
+  background: rgba(192, 57, 43, 0.1);
+  border: 1px solid rgba(192, 57, 43, 0.25);
+  color: #c0392b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+/* Spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { display: inline-block; animation: spin 0.8s linear infinite; }

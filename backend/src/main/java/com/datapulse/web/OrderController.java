@@ -5,6 +5,9 @@ import com.datapulse.repository.UserRepository;
 import com.datapulse.service.OrderService;
 import com.datapulse.web.dto.OrderResponse;
 import com.datapulse.web.dto.PageResponse;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +17,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/orders")
+@Transactional
 public class OrderController {
 
     private final OrderService orderService;

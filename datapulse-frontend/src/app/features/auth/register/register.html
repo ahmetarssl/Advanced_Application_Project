@@ -1,27 +1,81 @@
-<div class="login-container">
-  <div class="login-box">
-    <h2>DataPulse'a Kayıt Ol</h2>
-    <div class="error-box" *ngIf="errorMessage">{{ errorMessage }}</div>
-    <div class="success-box" *ngIf="successMessage">{{ successMessage }}</div>
+<div class="auth-page">
+  <div class="deco deco-top-right">
+    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+      <circle cx="130" cy="30" r="90" stroke="#1e2d3c" stroke-width="1.5" fill="none" stroke-dasharray="6 4"/>
+      <circle cx="130" cy="30" r="55" stroke="#1e2d3c" stroke-width="1" fill="none" opacity="0.5"/>
+    </svg>
+  </div>
+  <div class="deco deco-bottom-left">
+    <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+      <circle cx="30" cy="170" r="110" stroke="#1e2d3c" stroke-width="1.5" fill="none" stroke-dasharray="6 4"/>
+      <circle cx="30" cy="170" r="70" fill="rgba(30,45,60,0.12)"/>
+    </svg>
+  </div>
 
-    <form (ngSubmit)="onRegister()">
-      <div class="form-group">
-        <label>E-posta Adresi</label>
-        <input type="email" name="email" [(ngModel)]="email" required placeholder="ornek@email.com">
-      </div>
-      <div class="form-group">
-        <label>Şifre</label>
-        <input type="password" name="password" [(ngModel)]="password" required placeholder="Şifrenizi belirleyin">
-      </div>
-      <div class="form-group">
-        <label>Hesap Türü</label>
-        <select name="roleType" [(ngModel)]="roleType" class="form-select">
-          <option value="INDIVIDUAL">Bireysel Kullanıcı</option>
-          <option value="CORPORATE">Kurumsal Kullanıcı</option>
-        </select>
-      </div>
-      <button type="submit" class="login-btn">Kayıt Ol</button>
-    </form>
-    <p class="switch-page">Zaten hesabın var mı? <a routerLink="/login">Giriş Yap</a></p>
+  <div class="auth-content">
+    <div class="auth-logo">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+        <circle cx="26" cy="26" r="25" stroke="#1e2d3c" stroke-width="2" fill="none"/>
+        <path d="M26 10 C18 16, 14 22, 18 28 C22 34, 30 30, 34 36 C38 42, 34 46, 26 44" stroke="#1e2d3c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M18 18 C24 14, 32 14, 36 20" stroke="#7a9bb5" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="26" cy="26" r="3" fill="#1e2d3c"/>
+      </svg>
+    </div>
+    <h1 class="auth-title">HESAP OLUŞTUR</h1>
+    <p class="auth-subtitle">ÜCRETSİZ KAYIT OLUN</p>
+
+    <div class="auth-card">
+      @if (errorMessage) {
+        <div class="alert-box alert-error">
+          <i class="bi bi-exclamation-circle"></i> {{ errorMessage }}
+        </div>
+      }
+      @if (successMessage) {
+        <div class="alert-box alert-success">
+          <i class="bi bi-check-circle"></i> {{ successMessage }}
+        </div>
+      }
+
+      <form (ngSubmit)="onRegister()">
+        <div class="form-group">
+          <label>E-posta Adresi</label>
+          <div class="input-wrapper">
+            <i class="bi bi-envelope input-icon"></i>
+            <input type="email" name="email" [(ngModel)]="email" required placeholder="ad.soyad@email.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Şifre</label>
+          <div class="input-wrapper">
+            <i class="bi bi-lock input-icon"></i>
+            <input type="password" name="password" [(ngModel)]="password" required placeholder="••••••••">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Hesap Türü</label>
+          <div class="input-wrapper select-wrapper">
+            <i class="bi bi-person-badge input-icon"></i>
+            <select name="roleType" [(ngModel)]="roleType" class="form-select">
+              <option value="INDIVIDUAL">Bireysel Kullanıcı</option>
+              <option value="CORPORATE">Kurumsal Kullanıcı</option>
+            </select>
+            <i class="bi bi-chevron-down select-arrow"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="isLoading">
+          @if (!isLoading) { <span>KAYIT OL</span> }
+          @if (isLoading) { <span><i class="bi bi-arrow-repeat spin"></i> Kayıt yapılıyor...</span> }
+        </button>
+      </form>
+
+      <div class="divider"><span>veya</span></div>
+    </div>
+
+    <p class="switch-link">
+      Zaten hesabınız var mı? <a routerLink="/login"><strong>Giriş Yapın</strong></a>
+    </p>
   </div>
 </div>

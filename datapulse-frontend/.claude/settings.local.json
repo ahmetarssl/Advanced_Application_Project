@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Ahmet\\\\Desktop\\\\Advanced_Application_Project\\\\datapulse-frontend\\\\src\\\\app\" -Recurse)",
+      "Bash(Select-Object FullName)"
+    ]
+  }
+}
