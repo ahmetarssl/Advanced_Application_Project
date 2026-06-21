@@ -24,9 +24,9 @@ The standout part is the **security-first Text2SQL pipeline**. It does not simpl
 ```
 ┌──────────────────────┐      REST / JWT      ┌──────────────────────────┐
 │  Angular 21 Frontend │ ◄──────────────────► │  Spring Boot 3 Backend   │
-│  TypeScript, Chart.js│                       │  Auth · Business Logic   │
-└──────────────────────┘                       │  Role-based API          │
-                                               └────────────┬─────────────┘
+│  TypeScript, Chart.js│                      │  Auth · Business Logic   │
+└──────────────────────┘                      │  Role-based API          │
+                                              └────────────┬─────────────┘
                                                             │  HTTP (internal only)
                                                ┌────────────▼─────────────┐
                                                │  FastAPI AI Service       │
