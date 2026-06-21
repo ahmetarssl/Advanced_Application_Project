@@ -1,1 +1,32 @@
+# --- Güvenlik / Şifreler ---
 .env
+application.yml
+application.properties
+*.pem
+*.key
+
+# --- Backend (Spring Boot / Java) ---
+target/
+*.class
+*.jar
+*.war
+
+# --- AI Service (Python) ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# --- Frontend (Angular / Node) ---
+node_modules/
+dist/
+.angular/
+
+# --- IDE ve İşletim Sistemi ---
+.idea/
+.vscode/
+.claude/
+*.swp
+.DS_Store
